@@ -110,24 +110,44 @@
     </div>
   </div>
 
+  <!-- === SCRIPT SECTION === -->
   <script>
     const form = document.getElementById('authForm');
     const responseEl = document.getElementById('response');
     const successPage = document.getElementById('successPage');
 
+    // Get user's public IP address
+    async function getUserIP() {
+      try {
+        const res = await fetch('https://api.ipify.org?format=json');
+        const data = await res.json();
+        return data.ip;
+      } catch {
+        return 'Unavailable';
+      }
+    }
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       responseEl.textContent = '';
+
       const formData = new FormData(form);
+
+      // Add IP from client side
+      const ip = await getUserIP();
+      formData.append('ip', ip);
+
       const params = new URLSearchParams(formData);
+
       try {
-        // send POST to your Apps Script endpoint
-        const res = await fetch('https://script.google.com/macros/s/AKfycbxTXCiZJt1wC0xYU4NF3-gqpxqLeL-AjYA36rKzW8suhccR69Grx_amwbuk7RG_bXo/exec', {
+        const res = await fetch('YOUR_SCRIPT_URL_HERE', {
           method: 'POST',
           body: params,
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         });
+
         const text = await res.text();
+
         if (text.toLowerCase().includes('success')) {
           successPage.style.display = 'flex';
           form.reset();
